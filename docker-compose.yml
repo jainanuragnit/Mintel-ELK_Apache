@@ -15,8 +15,8 @@ services:
         source: elasticsearch
         target: /usr/share/elasticsearch/data
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "9200:9200" ##this is used for all api calls over http
+      - "9300:9300" ## this is custom binary protocol used for communication between nodes. In this case it is not required.
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTIC_PASSWORD: changeme
@@ -39,10 +39,10 @@ services:
         target: /usr/share/logstash/pipeline
         read_only: true
     ports:
-      - "5044:5044"
-      - "5000:5000/tcp"
+      - "5044:5044"      ## This is default beats port. Not required in this case.
+      - "5000:5000/tcp"  ## THis is the default port for logstash.
       - "5000:5000/udp"
-      - "9600:9600"
+      - "9600:9600"       ## This is used for web api calls.
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
@@ -61,7 +61,7 @@ services:
         target: /usr/share/kibana/config/kibana.yml
         read_only: true
     ports:
-      - "5601:5601"
+      - "5601:5601" ## default port for this web application.
     networks:
       - elk
     depends_on:
